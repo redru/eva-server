@@ -1,0 +1,21 @@
+{
+  "name": "eva-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "npm run typings-search && npm run typings && npm run tsc-compile",
+    "typings-search": "typings search node && typings search express && typings search body-parser && typings search serve-static && typings search express-serve-static-core && typings search mime && typings search passport && typings search jsonwebtoken",
+    "typings": "typings install --save --global env~node && typings install --save --global dt~express && typings install --save --global dt~body-parser && typings install --save --global dt~serve-static && typings install --save --global dt~express-serve-static-core && typings install --save --global dt~mime",
+    "tsc-compile": "tsc",
+    "tsc-run": "tsc && node main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4"
+  }
+}
