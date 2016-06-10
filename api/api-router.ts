@@ -9,7 +9,7 @@ export class ApiRouter {
         var router  = express.Router();
 
         router.use(function timeLog(req: express.Request, res: express.Response, next: express.NextFunction) {
-            console.log(req.method, '-', new Date());
+            console.log(new Date() + ' ' + req.method + ' - ' + req.originalUrl);
             next();
         });
 
