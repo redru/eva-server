@@ -19,6 +19,7 @@ app.use('/api', require('./api/api-router'));
 
 // Generic error handling
 app.use(function error(err, req, res, next) {
+    console.log('error handler');
     res.status(404).json();
 });
 
