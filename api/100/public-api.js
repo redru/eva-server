@@ -1,6 +1,8 @@
 "use strict";
 const express       = require('express');
 
+const AuthUser      = require('../../models/AuthUser');
+
 var router  = express.Router();
 
 router.get('/verify', function GET(req, res) {
