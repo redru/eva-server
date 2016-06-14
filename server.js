@@ -27,6 +27,7 @@ app.get('/', function keepAlive(req, res) {
 app.use('/api', require('./api/api-router'));
 
 // Generic error handling
+// TODO Not working at the moment
 app.use(function error(err, req, res, next) {
     console.log('error handler');
     res.status(404).json();
