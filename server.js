@@ -30,6 +30,7 @@ app.use((req, res, next) => {
         ' - Client: ' + (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress) +
         ' - RequestUrl: ' + req.originalUrl;
 
+    console.log(req.requeststamp);
     return next();
 });
 

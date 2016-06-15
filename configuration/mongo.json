@@ -8,6 +8,8 @@
       "socketOptions": {
         "keepAlive": 120
       }
-    }
+    },
+    "username": "",
+    "password": ""
   }
 }

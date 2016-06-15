@@ -29,4 +29,8 @@ MongoServices.prototype.userExists = function(auth) {
         });
 };
 
+MongoServices.prototype.registerUser = function(userData) {
+    return new AuthUser(userData).save();
+};
+
 module.exports = new MongoServices();
