@@ -1,0 +1,13 @@
+{
+  "uri": "mongodb://localhost:27017/evaServerAuth",
+  "options": {
+    "db": { "native_parser": true },
+    "server": {
+      "poolSize": 100,
+      "reconnectTries": 10,
+      "socketOptions": {
+        "keepAlive": 120
+      }
+    }
+  }
+}

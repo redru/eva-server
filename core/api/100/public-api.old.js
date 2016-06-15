@@ -6,11 +6,11 @@ const AuthUser      = require('../../models/AuthUser');
 
 var router  = express.Router();
 
-router.get('/token/verify', function GET(req, res) {
+router.get('/token/verify', (req, res) => {
     return res.status(200).json({ data: { }, message: 'GET /token/verify' });
 });
 
-router.post('/create', function POST(req, res) {
+router.post('/create', (req, res) => {
     const authData = req.body.data;
 
     return new Promise(function(resolve, reject) {
@@ -28,7 +28,7 @@ router.post('/create', function POST(req, res) {
                 }
             });
     }).then(function() {
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             bcrypt.hash(authData.password, 12, function(err, hash) {
                 if (err) {
                     console.log('Rejected with error:', err);
@@ -38,12 +38,12 @@ router.post('/create', function POST(req, res) {
                 }
             });
         });
-    }).then(function(data) {
+    }).then((data) => {
         new AuthUser({
             username: authData.username,
             password: data,
             dateCreate: new Date()
-        }).save(function(err, data) {
+        }).save((err, data) => {
             if (err) {
                 console.log(err);
                 return res.status(501).send('Internal server error');
@@ -51,24 +51,24 @@ router.post('/create', function POST(req, res) {
                 return res.status(200).send(data);
             }
         });
-    }, function(reason) {
+    }, (reason) => {
         console.log(reason);
         return res.status(501).send('Internal server error');
     });
 
 });
 
-router.post('/authorize', function POST(req, res) {
+router.post('/authorize', (req, res) => {
     const authData = req.body.data;
 
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
         AuthUser.where({ username: authData.username })
             .findOne()
-            .exec(function(err, data) {
+            .exec((err, data) => {
                 return err ? reject(err) : resolve(data);
             });
-    }).then(function(data) {
-        bcrypt.compare(authData.password, data, function(err, match) {
+    }).then((data) => {
+        bcrypt.compare(authData.password, data, (err, match) => {
             if (err) {
                 console.log(err);
                 return res.status(501).send('Internal server error');

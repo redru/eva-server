@@ -5,34 +5,42 @@ const express       = require('express');
 const bodyParser    = require('body-parser');
 const mongoose      = require('mongoose');
 
-const ServerConf    = require('./configuration/server-configuration.json');
-const DatabaseConf  = require('./configuration/database-configuration.json');
+const ServerConf    = require('./configuration/server.json');
+const DatabaseConf  = require('./configuration/mongo.json');
 
+// MONGODB CONFIGURATION -----------------------------------------------------------------------------------------------
+mongoose.Promise = global.Promise;
+mongoose.connect(DatabaseConf.uri, DatabaseConf.options, function(err) {
+    if (err) throw err;
+    else console.log('Success connectiong to MongoDB');
+});
+
+// EXPRESS CONFIGURATION -----------------------------------------------------------------------------------------------
 const app = express();
-
+app.disable('x-powered-by');
 app.use(bodyParser.json());
 
-// Mongo connnection
-mongoose.connect('mongodb://' + DatabaseConf.mongo.url + ':' + DatabaseConf.mongo.port + '/' + DatabaseConf.mongo.dbName, DatabaseConf.mongo.options, function(err) {
-    if (err) throw err;
-    else console.log('Connection to mongo established:', DatabaseConf.mongo.url + ':' + DatabaseConf.mongo.port + '/' + DatabaseConf.mongo.dbName);
+// MIDDLEWARE SECTION --------------------------------------------------------------------------------------------------
+/**
+ * Timestamp middleware
+ */
+app.use((req, res, next) => {
+    req.requeststamp = req.method +
+        ' - Time: ' + new Date().toDateString() +
+        ' - Client: ' + (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress) +
+        ' - RequestUrl: ' + req.originalUrl;
+
+    return next();
 });
 
-// Keep Alive
-app.get('/', function keepAlive(req, res) {
-    res.status(200).json({ data: { }, message: 'Server UP.' });
+// ROUTING SECTION -----------------------------------------------------------------------------------------------------
+app.get('/', (req, res) => { // Keep Alive
+    res.status(200).json({ data: { }, message: 'SERVER UP' });
 });
 
-// Api routing
-app.use('/api', require('./api/api-router'));
+app.use('/public', require('./core/api/100/public'));
 
-// Generic error handling
-// TODO Not working at the moment
-app.use(function error(err, req, res, next) {
-    console.log('error handler');
-    res.status(404).json();
-});
-
+// SERVER --------------------------------------------------------------------------------------------------------------
 http.createServer(app).listen(ServerConf.port, ServerConf.domain, () => {
-    console.log('Server deployed on http://' + ServerConf.domain + ':' + ServerConf.port);
+    console.log(ServerConf.name, 'started on http://' + ServerConf.domain + ':' + ServerConf.port);
 });

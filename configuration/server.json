@@ -1,4 +1,5 @@
 {
+  "name": "eva-server",
   "domain": "auth.eva-server.com",
   "port": 9000
 }
